@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
+import Guide from "./pages/Guide";
+import BasicEventForm from "./pages/BasicEventForm";
+// import VenueDetailsForm from "./pages/VenueDetailsForm";
 import { ThemeContext } from "./context/ThemeContext";
-import { Flower } from "lucide-react";
+import { FormProvider } from "./context/FormContext";
 
 function App() {
   const [isDark, setIsDark] = useState(() => {
@@ -9,10 +13,8 @@ function App() {
     const userSelected = localStorage.getItem("userSelectedTheme") === "true";
 
     if (userSelected && savedTheme !== null) {
-      return JSON.parse(savedTheme); // Use saved choice
+      return JSON.parse(savedTheme);
     }
-
-    // Otherwise use system preference
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
@@ -44,19 +46,24 @@ function App() {
 
   return (
     <ThemeContext.Provider value={{ isDark, setIsDark: toggleTheme }}>
-      <div
-        className={`min-h-screen transition-colors duration-300 ${
-          isDark ? "bg-[#1a1a1a] text-white" : "bg-white text-[#1a1a1a]"
-        }`}
-      >
-        <MainPage />
-      </div>
+      <FormProvider>
+        <div
+          className={`min-h-screen transition-colors duration-300 ${
+            isDark ? "bg-[#1a1a1a] text-white" : "bg-white text-[#1a1a1a]"
+          }`}
+        >
+          <Router>
+            <Routes>
+              <Route path="/" element={<MainPage />} />
+              <Route path="/guide" element={<Guide />} />
+              <Route path="/basiceventform" element={<BasicEventForm />} />
+              {/* <Route path="/venue-details" element={<VenueDetailsForm />} /> */}
+            </Routes>
+          </Router>
+        </div>
+      </FormProvider>
     </ThemeContext.Provider>
   );
 }
 
 export default App;
-
-// Flow:
-// If user has toggled before -> use their choice
-// If not -> use system dark/light

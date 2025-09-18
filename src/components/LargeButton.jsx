@@ -22,12 +22,14 @@ const LargeButton = ({
     "px-6 py-5 rounded-xl font-semibold text-2xl shadow-md transition duration-300 flex items-center justify-center gap-2";
 
   const variants = {
-    getStarted:
-      "bg-gradient-to-r from-[#5694FF] via-[#AC81F2] to-[#FF68B9] text-white hover:opacity-90",
-    outline:
-      isDark
-        ? "border border-gray-500 text-gray-300 hover:bg-gray-700"
-        : "border border-gray-600 text-gray-800 hover:bg-gray-200",
+    getStarted: `
+      relative overflow-hidden rounded-xl text-white font-semibold
+      bg-gradient-to-r from-[#5694FF] via-[#AC81F2] to-[#FF68B9]
+      hover:opacity-90
+    `,
+    outline: isDark
+      ? "border border-gray-500 text-gray-300 hover:bg-gray-700"
+      : "border border-gray-600 text-gray-800 hover:bg-gray-200",
     default: "bg-gray-200 hover:bg-gray-300 text-black",
   };
 

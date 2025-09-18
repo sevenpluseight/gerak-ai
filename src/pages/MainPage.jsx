@@ -7,7 +7,7 @@ import { useTheme } from "../context/useTheme";
 const MainPage = () => {
   const { isDark, setIsDark } = useTheme();
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="relative flex flex-col min-h-screen">
       <header className="flex justify-between items-center p-6">
         <h1 className="text-3xl font-bold ml-4 bg-gradient-to-r from-[#5694FF] via-[#AC81F2] to-[#FF68B9] bg-clip-text text-transparent">GerakAI</h1>
         <ThemeController isDark={isDark} setIsDark={setIsDark} />
@@ -34,8 +34,8 @@ const MainPage = () => {
         </p>
         
         <div className="flex gap-x-12">
-          <LargeButton title="Get Started" icon={MoveRight} variant="getStarted" href="#" />
-          <LargeButton title="Try Demo" icon={Play} variant="outline" href="#" />
+          <LargeButton title="Get Started" icon={MoveRight} variant="getStarted" href="#" isDark={isDark}/>
+          <LargeButton title="Try Demo" icon={Play} variant="outline" href="#" isDark={isDark} />
         </div>
       </main>
     </div>

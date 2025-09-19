@@ -1,6 +1,6 @@
 import React from "react";
 import { CheckCircle, MoveRight } from "lucide-react";
-import Layout from "../components/Layout";
+import HeaderLayout from "../components/Layout/HeaderLayout";
 import { useTheme } from "../context/useTheme";
 import MediumButton from "../components/Button/MediumButton";
 
@@ -16,7 +16,7 @@ const Guide = () => {
     {
       title: "Venue & Gates",
       description:
-        "Define the seating layout, number of gates, gate types, VIP zones, and restricted areas.",
+        "Define the seating HeaderLayout, number of gates, gate types, VIP zones, and restricted areas.",
     },
     {
       title: "Facilities & Attractions",
@@ -42,7 +42,7 @@ const Guide = () => {
 
   return (
     <div className={isDark ? "bg-[#1a1a1a] text-gray-100" : "bg-gray-50 text-gray-900"}>
-      <Layout>
+      <HeaderLayout>
         <main className="max-w-5xl mx-auto px-6 py-12 space-y-8 mt-10">
           <h1 className="text-4xl font-extrabold text-center">
             GerakAI Event Setup Guide
@@ -77,7 +77,7 @@ const Guide = () => {
             />
           </div>
         </main>
-      </Layout>
+      </HeaderLayout>
     </div>
   );
 };

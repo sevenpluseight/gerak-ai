@@ -72,7 +72,7 @@ const Guide = () => {
             <MediumButton
               title="Proceed to Event Form"
               icon={MoveRight}
-              href="/basiceventform"
+              href="/basic-event-form"
               isDark={isDark}
             />
           </div>

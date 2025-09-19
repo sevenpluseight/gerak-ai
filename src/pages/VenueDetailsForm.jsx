@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Layout from "../components/Layout";
 import { useTheme } from "../context/useTheme";
 import Alert from "../components/Alert";
 import NextButton from "../components/Button/NextButton";
@@ -7,6 +6,7 @@ import { useForm } from "../context/useForm";
 import Dropdown from "../components/Dropdown/GeneralDropdown";
 import MultiSelectDropdown from "../components/Dropdown/MultiSelectDropdown";
 import { validateVenueForm, isVenueFormComplete } from "../utils/validateVenueDetailsForm";
+import FormLayout from "../components/Layout/FormLayout";
 
 // Default Sections
 const standardSectionsDefault = [
@@ -28,9 +28,7 @@ const VenueDetailsForm = () => {
     sections: [],
     customFile: null,
     gates: [],
-    hasVIPZones: false,
     vipZones: [],
-    hasRestrictedAreas: false,
     restrictedAreas: [],
   });
 
@@ -66,13 +64,7 @@ const VenueDetailsForm = () => {
       ...prev,
       gates: [
         ...prev.gates,
-        { 
-          name: `Gate ${String.fromCharCode(65 + prev.gates.length)}`, 
-          type: "General", 
-          capacity: 0, 
-          accessibility: [], 
-          connectedSections: [] 
-        }
+        { name: `Gate ${String.fromCharCode(65 + prev.gates.length)}`, type: "General", capacity: 0, accessibility: [], connectedSections: [] }
       ]
     }));
   };
@@ -120,126 +112,114 @@ const VenueDetailsForm = () => {
   };
 
   return (
-    <div className={isDark ? "bg-[#1a1a1a] text-gray-100" : "bg-gray-50 text-gray-900"}>
-      <Layout>
-        <main className="max-w-4xl mx-auto px-6 py-12">
-          <div className={`card border rounded-xl shadow-md ${isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"}`}>
-            <div className="card-body">
-              <h1 className="text-2xl md:text-3xl font-bold text-center mb-6">Venue Details</h1>
-              <div className="flex flex-col gap-6">
+    <FormLayout title="Venue Details">
+      {/* Layout */}
+      <Dropdown
+        label="Seating Layout Type"
+        options={layoutOptions}
+        value={formData.layoutType}
+        onChange={handleLayoutChange}
+        error={errors.layoutType}
+        isDark={isDark}
+      />
+      {errors.layoutType && <Alert type="error" message={errors.layoutType} compact />}
 
-                {/* Layout */}
-                <Dropdown
-                  label="Seating Layout Type"
-                  options={layoutOptions}
-                  value={formData.layoutType}
-                  onChange={handleLayoutChange}
-                  error={errors.layoutType}
-                  isDark={isDark}
-                />
-                {errors.layoutType && <Alert type="error" message={errors.layoutType} compact />}
-
-                {/* Sections */}
-                {formData.layoutType === "Standard" &&
-                  formData.sections.map((section, idx) => (
-                    <div key={idx} className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="label font-semibold">Section Name</label>
-                        <input type="text" value={section.name} onChange={e => handleSectionChange(idx, "name", e.target.value)} className={inputClass(errors[`sections.${idx}.name`])} />
-                        {errors[`sections.${idx}.name`] && <Alert type="error" message={errors[`sections.${idx}.name`]} compact />}
-                      </div>
-                      <div>
-                        <label className="label font-semibold">Capacity</label>
-                        <input type="number" min={1} value={section.capacity} onChange={e => handleSectionChange(idx, "capacity", e.target.value)} className={inputClass(errors[`sections.${idx}.capacity`])} />
-                        {errors[`sections.${idx}.capacity`] && <Alert type="error" message={errors[`sections.${idx}.capacity`]} compact />}
-                      </div>
-                    </div>
-                  ))}
-
-                {formData.layoutType === "Custom" && (
-                  <div>
-                    <label className="label font-semibold">Upload CSV/JSON</label>
-                    <input type="file" accept=".csv,.json" onChange={handleFileUpload} className={inputClass(errors.customFile)} />
-                    {errors.customFile && <Alert type="error" message={errors.customFile} compact />}
-                  </div>
-                )}
-
-                {/* Gates */}
-                <div className="mt-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <h2 className="text-xl font-semibold">Gates / Entrances</h2>
-                    <button type="button" className="btn btn-sm" onClick={addGate}>Add Gate</button>
-                  </div>
-                  {formData.gates.map((gate, idx) => (
-                    <div key={idx} className="border rounded p-2 mb-2">
-                      <div className="cursor-pointer font-semibold" onClick={() => setExpandedGate(expandedGate === idx ? null : idx)}>
-                        {gate.name || `Gate ${idx + 1}`}
-                      </div>
-                      {expandedGate === idx && (
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-2">
-                          <input type="text" value={gate.name} placeholder="Gate Name" onChange={e => handleGateChange(idx, "name", e.target.value)} className={inputClass()} />
-                          <Dropdown options={gateTypes} value={gate.type} onChange={val => handleGateChange(idx, "type", val)} isDark={isDark} />
-                          <input type="number" min={1} value={gate.capacity} placeholder="Max Capacity" onChange={e => handleGateChange(idx, "capacity", e.target.value)} className={inputClass()} />
-                          <MultiSelectDropdown options={formData.sections.map(s => s.name)} value={gate.connectedSections} onChange={vals => handleGateChange(idx, "connectedSections", vals)} placeholder="Connected Sections" isDark={isDark} />
-                          <input type="text" value={gate.accessibility?.join(", ")} placeholder="Accessibility Features (comma)" onChange={e => handleGateChange(idx, "accessibility", e.target.value.split(",").map(s => s.trim()))} className={inputClass()} />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                {/* VIP Zones */}
-                <div className="mt-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <h2 className="text-xl font-semibold">VIP Zones</h2>
-                    <button type="button" className="btn btn-sm" onClick={addVIPZone}>Add VIP Zone</button>
-                  </div>
-                  {formData.vipZones.map((zone, idx) => (
-                    <div key={idx} className="border rounded p-2 mb-2">
-                      <div className="cursor-pointer font-semibold" onClick={() => setExpandedVIP(expandedVIP === idx ? null : idx)}>
-                        {zone.name || `VIP Zone ${idx + 1}`}
-                      </div>
-                      {expandedVIP === idx && (
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-2">
-                          <input type="text" value={zone.name} placeholder="VIP Zone Name" onChange={e => handleVIPZoneChange(idx, "name", e.target.value)} className={inputClass()} />
-                          <input type="text" value={zone.location} placeholder="Location" onChange={e => handleVIPZoneChange(idx, "location", e.target.value)} className={inputClass()} />
-                          <input type="number" min={1} value={zone.capacity} placeholder="Capacity" onChange={e => handleVIPZoneChange(idx, "capacity", e.target.value)} className={inputClass()} />
-                          <MultiSelectDropdown options={formData.gates.map(g => g.name)} value={zone.gates} onChange={vals => handleVIPZoneChange(idx, "gates", vals)} placeholder="Connected Gates" isDark={isDark} />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Restricted Areas */}
-                <div className="mt-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <h2 className="text-xl font-semibold">Restricted Areas</h2>
-                    <button type="button" className="btn btn-sm" onClick={addRestrictedArea}>Add Restricted Area</button>
-                  </div>
-                  {formData.restrictedAreas.map((area, idx) => (
-                    <div key={idx} className="border rounded p-2 mb-2">
-                      <div className="cursor-pointer font-semibold" onClick={() => setExpandedRestricted(expandedRestricted === idx ? null : idx)}>
-                        {area.location || `Restricted Area ${idx + 1}`}
-                      </div>
-                      {expandedRestricted === idx && (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-                          <input type="text" value={area.location} placeholder="Location" onChange={e => handleRestrictedAreaChange(idx, "location", e.target.value)} className={inputClass()} />
-                          <Dropdown options={["Construction", "Maintenance", "Other"]} value={area.type} onChange={val => handleRestrictedAreaChange(idx, "type", val)} isDark={isDark} />
-                          <input type="text" value={area.duration} placeholder="Duration" onChange={e => handleRestrictedAreaChange(idx, "duration", e.target.value)} className={inputClass()} />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                <NextButton onClick={handleNext} disabled={!isVenueFormComplete(formData)}>Next</NextButton>
-              </div>
+      {/* Sections */}
+      {formData.layoutType === "Standard" &&
+        formData.sections.map((section, idx) => (
+          <div key={idx} className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="label font-semibold">Section Name</label>
+              <input type="text" value={section.name} onChange={e => handleSectionChange(idx, "name", e.target.value)} className={inputClass(errors[`sections.${idx}.name`])} />
+              {errors[`sections.${idx}.name`] && <Alert type="error" message={errors[`sections.${idx}.name`]} compact />}
+            </div>
+            <div>
+              <label className="label font-semibold">Capacity</label>
+              <input type="number" min={1} value={section.capacity} onChange={e => handleSectionChange(idx, "capacity", e.target.value)} className={inputClass(errors[`sections.${idx}.capacity`])} />
+              {errors[`sections.${idx}.capacity`] && <Alert type="error" message={errors[`sections.${idx}.capacity`]} compact />}
             </div>
           </div>
-        </main>
-      </Layout>
-    </div>
+        ))}
+
+      {formData.layoutType === "Custom" && (
+        <div>
+          <label className="label font-semibold">Upload CSV/JSON</label>
+          <input type="file" accept=".csv,.json" onChange={handleFileUpload} className={inputClass(errors.customFile)} />
+          {errors.customFile && <Alert type="error" message={errors.customFile} compact />}
+        </div>
+      )}
+
+      {/* Gates */}
+      <div className="mt-6">
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-xl font-semibold">Gates / Entrances</h2>
+          <button type="button" className="btn btn-sm" onClick={addGate}>Add Gate</button>
+        </div>
+        {formData.gates.map((gate, idx) => (
+          <div key={idx} className="border rounded p-2 mb-2">
+            <div className="cursor-pointer font-semibold" onClick={() => setExpandedGate(expandedGate === idx ? null : idx)}>
+              {gate.name || `Gate ${idx + 1}`}
+            </div>
+            {expandedGate === idx && (
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-2">
+                <input type="text" value={gate.name} placeholder="Gate Name" onChange={e => handleGateChange(idx, "name", e.target.value)} className={inputClass()} />
+                <Dropdown options={gateTypes} value={gate.type} onChange={val => handleGateChange(idx, "type", val)} isDark={isDark} />
+                <input type="number" min={1} value={gate.capacity} placeholder="Max Capacity" onChange={e => handleGateChange(idx, "capacity", e.target.value)} className={inputClass()} />
+                <MultiSelectDropdown options={formData.sections.map(s => s.name)} value={gate.connectedSections} onChange={vals => handleGateChange(idx, "connectedSections", vals)} placeholder="Connected Sections" isDark={isDark} />
+                <input type="text" value={gate.accessibility?.join(", ")} placeholder="Accessibility Features (comma)" onChange={e => handleGateChange(idx, "accessibility", e.target.value.split(",").map(s => s.trim()))} className={inputClass()} />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* VIP Zones */}
+      <div className="mt-6">
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-xl font-semibold">VIP Zones</h2>
+          <button type="button" className="btn btn-sm" onClick={addVIPZone}>Add VIP Zone</button>
+        </div>
+        {formData.vipZones.map((zone, idx) => (
+          <div key={idx} className="border rounded p-2 mb-2">
+            <div className="cursor-pointer font-semibold" onClick={() => setExpandedVIP(expandedVIP === idx ? null : idx)}>
+              {zone.name || `VIP Zone ${idx + 1}`}
+            </div>
+            {expandedVIP === idx && (
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-2">
+                <input type="text" value={zone.name} placeholder="VIP Zone Name" onChange={e => handleVIPZoneChange(idx, "name", e.target.value)} className={inputClass()} />
+                <input type="text" value={zone.location} placeholder="Location" onChange={e => handleVIPZoneChange(idx, "location", e.target.value)} className={inputClass()} />
+                <input type="number" min={1} value={zone.capacity} placeholder="Capacity" onChange={e => handleVIPZoneChange(idx, "capacity", e.target.value)} className={inputClass()} />
+                <MultiSelectDropdown options={formData.gates.map(g => g.name)} value={zone.gates} onChange={vals => handleVIPZoneChange(idx, "gates", vals)} placeholder="Connected Gates" isDark={isDark} />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Restricted Areas */}
+      <div className="mt-6">
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-xl font-semibold">Restricted Areas</h2>
+          <button type="button" className="btn btn-sm" onClick={addRestrictedArea}>Add Restricted Area</button>
+        </div>
+        {formData.restrictedAreas.map((area, idx) => (
+          <div key={idx} className="border rounded p-2 mb-2">
+            <div className="cursor-pointer font-semibold" onClick={() => setExpandedRestricted(expandedRestricted === idx ? null : idx)}>
+              {area.location || `Restricted Area ${idx + 1}`}
+            </div>
+            {expandedRestricted === idx && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                <input type="text" value={area.location} placeholder="Location" onChange={e => handleRestrictedAreaChange(idx, "location", e.target.value)} className={inputClass()} />
+                <Dropdown options={["Construction", "Maintenance", "Other"]} value={area.type} onChange={val => handleRestrictedAreaChange(idx, "type", val)} isDark={isDark} />
+                <input type="text" value={area.duration} placeholder="Duration" onChange={e => handleRestrictedAreaChange(idx, "duration", e.target.value)} className={inputClass()} />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <NextButton onClick={handleNext} disabled={!isVenueFormComplete(formData)}>Next</NextButton>
+    </FormLayout>
   );
 };
 

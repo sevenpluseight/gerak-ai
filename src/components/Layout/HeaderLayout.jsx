@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import ThemeController from "./ThemeController";
+import ThemeController from "../ThemeController";
 
-const Layout = ({ children }) => {
+const HeaderLayout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="flex justify-between items-center p-6">
@@ -20,4 +20,4 @@ const Layout = ({ children }) => {
   );
 };
 
-export default Layout;
+export default HeaderLayout;

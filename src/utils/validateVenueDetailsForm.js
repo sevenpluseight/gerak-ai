@@ -1,9 +1,9 @@
 export const isVenueFormComplete = (formData) => {
   // Sections
   const sectionsComplete =
-    formData.layoutType === "Standard"
+    formData.HeaderLayoutType === "Standard"
       ? formData.sections.length > 0 && formData.sections.every(s => s.name && s.capacity > 0)
-      : formData.layoutType === "Custom"
+      : formData.HeaderLayoutType === "Custom"
       ? !!formData.customFile
       : false;
 
@@ -36,13 +36,13 @@ export const isVenueFormComplete = (formData) => {
 export const validateVenueForm = (formData) => {
   const errors = {};
 
-  // Layout Type
-  if (!formData.layoutType) {
-    errors.layoutType = "Please select a seating layout type";
+  // HeaderLayout Type
+  if (!formData.HeaderLayoutType) {
+    errors.HeaderLayoutType = "Please select a seating HeaderLayout type";
   }
 
   // Sections
-  if (formData.layoutType === "Standard") {
+  if (formData.HeaderLayoutType === "Standard") {
     if (!formData.sections || formData.sections.length === 0) {
       errors.sections = "At least one section is required";
     } else {
@@ -53,7 +53,7 @@ export const validateVenueForm = (formData) => {
     }
   }
 
-  if (formData.layoutType === "Custom") {
+  if (formData.HeaderLayoutType === "Custom") {
     if (!formData.customFile) errors.customFile = "Please upload a CSV or JSON file";
   }
 

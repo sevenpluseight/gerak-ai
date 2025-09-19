@@ -4,6 +4,7 @@ import MainPage from "./pages/MainPage";
 import Guide from "./pages/Guide";
 import BasicEventForm from "./pages/BasicEventForm";
 import VenueDetailsForm from "./pages/VenueDetailsForm";
+import FacilitiesAttractionsForm from "./pages/FacilitiesAttractionsForm";
 import { ThemeContext } from "./context/ThemeContext";
 import { FormProvider } from "./context/FormContext";
 
@@ -58,6 +59,7 @@ function App() {
               <Route path="/guide" element={<Guide />} />
               <Route path="/basic-event-form" element={<BasicEventForm />} />
               <Route path="/venue-details-form" element={<VenueDetailsForm />} />
+              <Route path="/facilities-attractions-form" element={<FacilitiesAttractionsForm />} />
             </Routes>
           </Router>
         </div>

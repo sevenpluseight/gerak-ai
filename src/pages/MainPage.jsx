@@ -1,5 +1,5 @@
 import React from "react";
-import Layout from "../components/Layout";
+import HeaderLayout from "../components/Layout/HeaderLayout";
 import LargeButton from "../components/Button/LargeButton";
 import { MoveRight, Play } from "lucide-react";
 import { useTheme } from "../context/useTheme";
@@ -9,7 +9,7 @@ const MainPage = () => {
   const { isDark } = useTheme();
 
   return (
-    <Layout>
+    <HeaderLayout>
       <main className="flex flex-col items-center text-center mt-48 px-6">
         <h1 className="text-8xl font-extrabold bg-gradient-to-r from-[#5694FF] via-[#AC81F2] to-[#FF68B9] bg-clip-text text-transparent drop-shadow-[0_6px_6px_rgba(0,0,0,0.3)]">
           GerakAI
@@ -42,7 +42,7 @@ const MainPage = () => {
       </main>
 
       <Footer />
-    </Layout>
+    </HeaderLayout>
   );
 };
 

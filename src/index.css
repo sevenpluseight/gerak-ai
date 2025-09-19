@@ -3,3 +3,11 @@
 
 /* @tailwindcss/preflight;
 @tailwind utilities; */
+
+/* Hide native datetime-local icons completely */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-inner-spin-button,
+input[type="datetime-local"]::-webkit-clear-button {
+  display: none !important;
+  -webkit-appearance: none;
+}

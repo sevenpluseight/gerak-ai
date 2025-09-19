@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import Guide from "./pages/Guide";
 import BasicEventForm from "./pages/BasicEventForm";
-// import VenueDetailsForm from "./pages/VenueDetailsForm";
+import VenueDetailsForm from "./pages/VenueDetailsForm";
 import { ThemeContext } from "./context/ThemeContext";
 import { FormProvider } from "./context/FormContext";
 
@@ -56,8 +56,8 @@ function App() {
             <Routes>
               <Route path="/" element={<MainPage />} />
               <Route path="/guide" element={<Guide />} />
-              <Route path="/basiceventform" element={<BasicEventForm />} />
-              {/* <Route path="/venue-details" element={<VenueDetailsForm />} /> */}
+              <Route path="/basic-event-form" element={<BasicEventForm />} />
+              <Route path="/venue-details-form" element={<VenueDetailsForm />} />
             </Routes>
           </Router>
         </div>

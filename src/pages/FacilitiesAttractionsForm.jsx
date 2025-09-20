@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { useTheme } from "../context/useTheme";
 import { useForm } from "../context/useForm";
 import FormLayout from "../components/Layout/FormLayout";
-import Dropdown from "../components/Dropdown/GeneralDropdown";
 import MultiSelectDropdown from "../components/Dropdown/MultiSelectDropdown";
 import Alert from "../components/Alert";
 import NextButton from "../components/Button/NextButton";
 import { validateFacilitiesForm, isFacilitiesFormComplete } from "../utils/validateFacilitiesAttractionsForm";
+import { useNavigate } from "react-router-dom";
 
 const FacilitiesAttractionsForm = ({ sections = ["North", "South", "East", "West"] }) => {
   const { isDark } = useTheme();
   const { updateFormData } = useForm();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     restroomsAvailable: false,
@@ -40,7 +41,7 @@ const FacilitiesAttractionsForm = ({ sections = ["North", "South", "East", "West
 
     if (Object.keys(validationErrors).length === 0) {
       updateFormData("facilities", formData);
-      // TODO: Navigate to next step
+      navigate("/transport-access-form");
     }
   };
 
@@ -48,6 +49,7 @@ const FacilitiesAttractionsForm = ({ sections = ["North", "South", "East", "West
     <FormLayout title="Facilities & Attractions">
 
       {/* Restrooms */}
+      {/* FIX: fix "e" on Restrooms Available - Number of restrooms */}
       <div>
         <label className="label font-semibold">Restrooms Available?</label>
         <select
@@ -83,6 +85,8 @@ const FacilitiesAttractionsForm = ({ sections = ["North", "South", "East", "West
       </div>
 
       {/* Food Courts */}
+      {/* FIX: fix "e" on Food Courts / Vendors Available - Number of food courts */}
+      {/* FIX: fix "e" on Food Courts / Vendors Available - Capacity per food court */}
       <div className="mt-6">
         <label className="label font-semibold">Food Courts / Vendors Available?</label>
         <select

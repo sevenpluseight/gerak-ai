@@ -61,7 +61,7 @@ const BasicEventForm = () => {
 
     if (Object.keys(validationErrors).length === 0) {
       updateFormData("event", formData);
-      navigate("/venue-details");
+      navigate("/venue-details-form");
     }
   };
 

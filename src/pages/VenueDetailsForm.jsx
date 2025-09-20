@@ -7,6 +7,7 @@ import Dropdown from "../components/Dropdown/GeneralDropdown";
 import MultiSelectDropdown from "../components/Dropdown/MultiSelectDropdown";
 import { validateVenueForm, isVenueFormComplete } from "../utils/validateVenueDetailsForm";
 import FormLayout from "../components/Layout/FormLayout";
+import { useNavigate } from "react-router-dom";
 
 // Default Sections
 const standardSectionsDefault = [
@@ -22,6 +23,7 @@ const gateTypes = ["General", "VIP Only", "Staff Only", "Emergency Exit", "Servi
 const VenueDetailsForm = () => {
   const { isDark } = useTheme();
   const { updateFormData } = useForm();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     layoutType: "",
@@ -107,7 +109,7 @@ const VenueDetailsForm = () => {
 
     if (Object.keys(validationErrors).length === 0) {
       updateFormData("venue", formData);
-      // TODO: navigate to next step
+      navigate("/facilities-attractions");
     }
   };
 
@@ -125,6 +127,7 @@ const VenueDetailsForm = () => {
       {errors.layoutType && <Alert type="error" message={errors.layoutType} compact />}
 
       {/* Sections */}
+      {/* FIX: fix leading zeros on Seating Layout Type (Standard) - Capacity */}
       {formData.layoutType === "Standard" &&
         formData.sections.map((section, idx) => (
           <div key={idx} className="grid grid-cols-2 gap-4">

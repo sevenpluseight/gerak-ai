@@ -9,6 +9,7 @@ const MainPage = () => {
   const { isDark } = useTheme();
 
   return (
+    // TODO: add follow os theme to the web
     <HeaderLayout>
       <main className="flex flex-col items-center text-center mt-48 px-6">
         <h1 className="text-8xl font-extrabold bg-gradient-to-r from-[#5694FF] via-[#AC81F2] to-[#FF68B9] bg-clip-text text-transparent drop-shadow-[0_6px_6px_rgba(0,0,0,0.3)]">

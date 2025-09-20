@@ -5,6 +5,9 @@ import Guide from "./pages/Guide";
 import BasicEventForm from "./pages/BasicEventForm";
 import VenueDetailsForm from "./pages/VenueDetailsForm";
 import FacilitiesAttractionsForm from "./pages/FacilitiesAttractionsForm";
+import TransportAccessForm from "./pages/TransportAccessForm";
+import StaffSafetyForm from "./pages/StaffSafetyForm";
+import EnvironmentalExternalForm from "./pages/EnvironmentalExternalForm";
 import { ThemeContext } from "./context/ThemeContext";
 import { FormProvider } from "./context/FormContext";
 
@@ -60,6 +63,9 @@ function App() {
               <Route path="/basic-event-form" element={<BasicEventForm />} />
               <Route path="/venue-details-form" element={<VenueDetailsForm />} />
               <Route path="/facilities-attractions-form" element={<FacilitiesAttractionsForm />} />
+              <Route path="/transport-access-form" element={<TransportAccessForm />} />
+              <Route path="/staff-safety-form" element={<StaffSafetyForm />} />
+              <Route path="/environmental-external-form" element={<EnvironmentalExternalForm />} />
             </Routes>
           </Router>
         </div>

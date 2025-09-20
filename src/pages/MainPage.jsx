@@ -32,7 +32,7 @@ const MainPage = () => {
             isDark={isDark}
           />
           <LargeButton
-            title="Try Demo"
+            title="See Demo"
             icon={Play}
             variant="outline"
             href="#"

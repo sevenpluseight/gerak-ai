@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
-import Guide from "./pages/Guide";
+import FileUpload from "./pages/FileUpload";
+import Dashboard from "./pages/Dashboard";
 import { ThemeContext } from "./context/ThemeContext";
 
 function App() {
@@ -51,7 +52,8 @@ function App() {
           <Router>
             <Routes>
               <Route path="/" element={<MainPage />} />
-              <Route path="/file-upload" element={<Guide />} />
+              <Route path="/file-upload" element={<FileUpload />} />
+              <Route path="/user-dashboard" element={<Dashboard />} />
             </Routes>
           </Router>
         </div>

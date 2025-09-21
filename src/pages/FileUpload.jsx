@@ -11,9 +11,11 @@ const FileUpload = () => {
   const [results, setResults] = useState({}); // filename -> extracted keywords
   const { isDark } = useTheme();
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const MAX_FILES = 5;
-  const MAX_SIZE = 1024 * 1024 * 1024; // 1 GB per file
-  const MAX_TOTAL_SIZE = 5 * 1024 * 1024 * 1024; // 5 GB total
+  const MAX_SIZE = 1024 * 1024 * 1024; // 1 GB
+  const MAX_TOTAL_SIZE = 5 * 1024 * 1024 * 1024; // 5 GB
 
   const categories = [
     "Entry Rush",
@@ -22,7 +24,6 @@ const FileUpload = () => {
     "General",
   ];
 
-  // Format bytes into human-readable
   const formatSize = (bytes) => {
     if (bytes >= 1024 ** 3) return `${(bytes / 1024 ** 3).toFixed(2)} GB`;
     if (bytes >= 1024 ** 2) return `${(bytes / 1024 ** 2).toFixed(2)} MB`;
@@ -51,20 +52,20 @@ const FileUpload = () => {
   };
 
   const removeFile = (index) => {
-    setFiles((prev) => prev.filter((_, i) => i !== index));
+    const name = files[index].name;
+    setFiles(files.filter((_, i) => i !== index));
     setFileStatuses((prev) => {
       const copy = { ...prev };
-      delete copy[files[index].name];
+      delete copy[name];
       return copy;
     });
     setResults((prev) => {
       const copy = { ...prev };
-      delete copy[files[index].name];
+      delete copy[name];
       return copy;
     });
   };
 
-  // Upload files to backend
   const handleSubmit = async () => {
     if (files.length === 0) {
       alert("Please upload at least one file before submitting.");
@@ -82,63 +83,49 @@ const FileUpload = () => {
       formData.append("file", file);
 
       try {
-        // Upload file
-        await axios.post(
-          "http://127.0.0.1:8000/upload",
-          formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
+        await axios.post(`${API_URL}/upload`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
 
-        // Initialize status
-        setFileStatuses((prev) => ({
-          ...prev,
-          [file.name]: "processing",
-        }));
-
-        // Start polling for status
+        setFileStatuses((prev) => ({ ...prev, [file.name]: "processing" }));
         pollStatus(file.name);
       } catch (err) {
-        console.error(err);
-        alert(`Upload failed for ${file.name}`);
+        console.error("Upload failed:", err);
         setFileStatuses((prev) => ({ ...prev, [file.name]: "failed" }));
       }
     }
   };
 
-  // Poll backend for processing status
   const pollStatus = (filename) => {
     const interval = setInterval(async () => {
       try {
-        const response = await axios.get(
-          `http://127.0.0.1:8000/status/${filename}`
-        );
-        const status = response.data.status;
-        setFileStatuses((prev) => ({ ...prev, [filename]: status }));
+        const { data } = await axios.get(`${API_URL}/status/${filename}`);
+        setFileStatuses((prev) => ({ ...prev, [filename]: data.status }));
 
-        if (status === "done") {
+        if (data.status === "done") {
           clearInterval(interval);
           fetchResults(filename);
-        } else if (status === "failed") {
+        } else if (data.status === "failed") {
           clearInterval(interval);
         }
       } catch (err) {
-        console.error(err);
+        console.error("Polling failed:", err);
         clearInterval(interval);
         setFileStatuses((prev) => ({ ...prev, [filename]: "failed" }));
       }
-    }, 3000); // poll every 3s
+    }, 3000);
   };
 
-  // Fetch extracted keywords from backend
   const fetchResults = async (filename) => {
     try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/results/${filename}`
-      );
-      setResults((prev) => ({ ...prev, [filename]: response.data }));
+      const { data } = await axios.get(`${API_URL}/results/${filename}`);
+      setResults((prev) => ({ ...prev, [filename]: data }));
     } catch (err) {
-      console.error(err);
-      setResults((prev) => ({ ...prev, [filename]: { error: "Failed to fetch results" } }));
+      console.error("Fetching results failed:", err);
+      setResults((prev) => ({
+        ...prev,
+        [filename]: { error: "Failed to fetch results" },
+      }));
     }
   };
 
@@ -170,8 +157,8 @@ const FileUpload = () => {
               onChange={handleFileChange}
               className={`file-input file-input-bordered w-full mt-4 ${
                 isDark
-                  ? "bg-gray-700 text-white placeholder-gray-400 border-gray-600"
-                  : "bg-white text-gray-900 placeholder-gray-500 border-gray-300"
+                  ? "bg-gray-700 text-white border-gray-600"
+                  : "bg-white text-gray-900 border-gray-300"
               }`}
             />
 
@@ -185,9 +172,7 @@ const FileUpload = () => {
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="truncate max-w-xs">
-                        {file.name} ({formatSize(file.size)})
-                      </span>
+                      <span>{file.name} ({formatSize(file.size)})</span>
                       <button
                         className="btn btn-xs btn-error"
                         onClick={() => removeFile(index)}
@@ -209,7 +194,6 @@ const FileUpload = () => {
                         {fileStatuses[file.name] || "pending"}
                       </span>
                     </div>
-
                     {results[file.name] && (
                       <div className="mt-2 text-xs text-gray-400">
                         <pre>{JSON.stringify(results[file.name], null, 2)}</pre>
@@ -223,11 +207,7 @@ const FileUpload = () => {
             {files.length > 0 && (
               <div className="mt-4 text-sm font-medium">
                 Total size:{" "}
-                <span
-                  className={`${
-                    totalSize > MAX_TOTAL_SIZE ? "text-red-500" : "text-green-600"
-                  }`}
-                >
+                <span className={totalSize > MAX_TOTAL_SIZE ? "text-red-500" : "text-green-600"}>
                   {formatSize(totalSize)} / 5GB
                 </span>
               </div>
@@ -253,8 +233,7 @@ const FileUpload = () => {
 
             <div className="card-actions justify-between mt-6">
               <span className={`text-sm font-semibold ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-                Selected Scenario:{" "}
-                <span className="text-purple-500">{selectedCategory}</span>
+                Selected Scenario: <span className="text-purple-500">{selectedCategory}</span>
               </span>
               <button className="btn bg-purple-600 text-white" onClick={handleSubmit}>
                 Start Prediction

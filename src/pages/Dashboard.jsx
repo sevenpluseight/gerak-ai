@@ -25,8 +25,8 @@ const SmallStat = ({ title, value, isDark }) => (
       isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900 border border-gray-300"
     }`}
   >
-    <div className="text-sm text-gray-400">{title}</div>
-    <div className="mt-1 text-2xl font-bold">{value}</div>
+    <div className="text-sm text-gray-500">{title}</div>
+    <div className="mt-1 text-2xl font-bold text-gray-500">{value}</div>
   </div>
 );
 
@@ -36,7 +36,7 @@ const MockLineChart = ({ isDark }) => (
       isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900 border border-gray-300"
     }`}
   >
-    <div className="text-sm text-gray-400">Predicted density (mock)</div>
+    <div className="text-sm text-gray-500">Predicted density (mock)</div>
     <svg viewBox="0 0 200 80" className="w-full h-36 mt-2">
       <defs>
         <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
@@ -57,7 +57,7 @@ const MockLineChart = ({ isDark }) => (
         fill="url(#g1)"
       />
     </svg>
-    <div className="text-xs text-gray-400 mt-2">This is a mock chart for layout only.</div>
+    <div className="text-xs text-gray-500 mt-2">This is a mock chart for layout only.</div>
   </div>
 );
 
@@ -67,8 +67,8 @@ const MockBarChart = ({ isDark }) => (
       isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900 border border-gray-300"
     }`}
   >
-    <div className="text-sm text-gray-400">Recent metric (mock)</div>
-    <div className="flex items-end gap-2 h-25 mt-3">
+    <div className="text-sm text-gray-500">Recent metric (mock)</div>
+    <div className="flex items-end gap-2 h-28 mt-3">
       {[40, 65, 55, 80, 30, 70].map((v, i) => (
         <div
           key={i}
@@ -78,7 +78,7 @@ const MockBarChart = ({ isDark }) => (
         />
       ))}
     </div>
-    <div className="text-xs text-gray-400 mt-2">Bars are mock samples.</div>
+    <div className="text-xs text-gray-500 mt-2">Bars are mock samples.</div>
   </div>
 );
 
@@ -98,7 +98,7 @@ const Dashboard = () => {
       <div className="min-h-[80vh] px-6 ml-4.5 relative">
         {/* Header */}
         <div className="mb-6">
-          <h2 className="text-3xl font-bold">Overview</h2>
+          <h2 className="text-3xl font-bold text-gray-500">Overview</h2>
           <p className="text-lg text-gray-500">Quick snapshot of predictions and recent activity</p>
         </div>
 
@@ -108,8 +108,8 @@ const Dashboard = () => {
           <div className="col-span-12 md:col-span-8">
             <div className={`${cardClass} h-full`}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold">Current Prediction</h3>
-                <div className="text-sm text-gray-400">Updated: just now</div>
+                <h3 className="text-lg font-semibold text-gray-500">Current Prediction</h3>
+                <div className="text-sm text-gray-500">Updated: just now</div>
               </div>
 
               {/* Scenario Buttons */}
@@ -144,14 +144,14 @@ const Dashboard = () => {
 
                 <div className="relative">
                   <div
-                    className={`p-8 rounded-lg shadow-sm flex items-center gap-2 cursor-pointer ${
+                    className={`p-4 rounded-lg shadow-sm flex items-center gap-2 cursor-pointer ${
                       isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900 border border-gray-300"
                     }`}
                     onClick={() => setShowAccuracyTooltip(!showAccuracyTooltip)}
                   >
-                    <span className="text-sm text-gray-400">Accuracy:</span>
-                    <span className="font-bold text-2xl">{stats.accuracy || 80}%</span>
-                    <Info className={`w-5 h-5 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
+                    <span className="text-sm text-gray-500">Accuracy:</span>
+                    <span className="font-bold text-2xl text-gray-500">{stats.accuracy || 80}%</span>
+                    <Info className={`w-5 h-15 ${isDark ? "text-gray-500" : "text-gray-500"}`} />
                   </div>
 
                   {/* Tooltip */}
@@ -162,13 +162,13 @@ const Dashboard = () => {
                       }`}
                     >
                       <div className="flex justify-between items-start mb-1">
-                        <h4 className="font-bold text-sm">Improve Accuracy</h4>
+                        <h4 className="font-bold text-sm text-gray-500">Improve Accuracy</h4>
                         <X
-                          className="w-4 h-4 cursor-pointer"
+                          className="w-4 h-4 cursor-pointer text-gray-500"
                           onClick={() => setShowAccuracyTooltip(false)}
                         />
                       </div>
-                      <ul className="list-disc list-inside space-y-1 text-xs">
+                      <ul className="list-disc list-inside space-y-1 text-xs text-gray-500">
                         <li>Provide high-quality input data with minimal missing values.</li>
                         <li>Update predictive models with recent events regularly.</li>
                         <li>Validate predictions against real outcomes when possible.</li>
@@ -186,8 +186,8 @@ const Dashboard = () => {
           <div className="col-span-12 md:col-span-4">
             <div className={`${cardClass} h-full`}>
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Prediction History</h3>
-                <div className="text-xs text-gray-400">Recent</div>
+                <h3 className="text-lg font-semibold text-gray-500">Prediction History</h3>
+                <div className="text-xs text-gray-500">Recent</div>
               </div>
               <ul className="mt-4 space-y-3 overflow-auto flex-1">
                 {mockHistory.map((h) => (
@@ -198,8 +198,8 @@ const Dashboard = () => {
                     } flex justify-between items-center`}
                   >
                     <div>
-                      <div className="font-medium">{h.label}</div>
-                      <div className="text-xs text-gray-400">{h.time}</div>
+                      <div className="font-medium text-gray-500">{h.label}</div>
+                      <div className="text-xs text-gray-500">{h.time}</div>
                     </div>
                     <div
                       className={`text-sm font-semibold ${
@@ -227,7 +227,7 @@ const Dashboard = () => {
 
           <div className="col-span-12 md:col-span-4">
             <div className={cardClass}>
-              <h4 className="text-sm text-gray-400">Quick Actions</h4>
+              <h4 className="text-sm text-gray-500">Quick Actions</h4>
               <div className="mt-3 flex flex-col gap-2 flex-1">
                 {["Run full analysis", "Export report", "Manage uploads"].map((label) => (
                   <button
@@ -243,7 +243,7 @@ const Dashboard = () => {
 
           <div className="col-span-12 md:col-span-4">
             <div className={cardClass}>
-              <h4 className="text-sm text-gray-400">Recent Uploads</h4>
+              <h4 className="text-sm text-gray-500">Recent Uploads</h4>
               <div className="mt-3 space-y-2 text-sm">
                 {[
                   "file_eventA.pdf — 2.1 MB",
@@ -270,7 +270,7 @@ const Dashboard = () => {
         <div className="col-span-12 mt-4">
           <div
             className={`p-2 rounded-lg ${
-              isDark ? "bg-gray-900 text-gray-400" : "bg-white text-gray-400 border border-gray-300"
+              isDark ? "bg-gray-900 text-gray-500" : "bg-white text-gray-500 border border-gray-300"
             } shadow flex items-center justify-center`}
           >
             <div className="text-center text-sm font-regular">

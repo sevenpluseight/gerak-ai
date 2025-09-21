@@ -16,23 +16,23 @@ const MainPage = () => {
         </h1>
 
         <h2 className={`text-3xl font-bold mt-4 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-          Predict. Insight. Action.
+          Upload. Drink Kopi. Analyze.
         </h2>
 
         <p className={`text-lg font-medium max-w-2xl mt-4 mb-8 ${isDark ? "text-gray-300" : "text-gray-500"}`}>
           AI-powered simulations for safer, smarter events. Harness the power of crowd intelligence to make data-driven decisions in real-time.
         </p>
 
-        <div className="flex gap-x-12 mt-4">
+        <div className="flex gap-x-12 mt-2">
           <LargeButton
             title="Get Started"
             icon={MoveRight}
             variant="getStarted"
-            href="/guide"
+            href="/file-upload"
             isDark={isDark}
           />
           <LargeButton
-            title="Try Demo"
+            title="See Demo"
             icon={Play}
             variant="outline"
             href="#"

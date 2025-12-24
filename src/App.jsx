@@ -49,7 +49,7 @@ function App() {
             isDark ? "bg-[#1a1a1a] text-white" : "bg-white text-[#1a1a1a]"
           }`}
         >
-          <Router>
+          <Router basename="/gerak-ai">
             <Routes>
               <Route path="/" element={<MainPage />} />
               <Route path="/file-upload" element={<FileUpload />} />

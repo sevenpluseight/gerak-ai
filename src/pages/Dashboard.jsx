@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import HeaderLayout from "../components/Layout/HeaderLayout";
-import { X } from "lucide-react";
 import Papa from "papaparse";
 
 const FUNCTION_URL = "https://nyqtf3jtsw24eloznvyzeywxgm0mjqdt.lambda-url.ap-southeast-1.on.aws/";

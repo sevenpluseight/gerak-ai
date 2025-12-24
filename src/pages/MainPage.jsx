@@ -28,7 +28,7 @@ const MainPage = () => {
             title="Get Started"
             icon={MoveRight}
             variant="getStarted"
-            href="/file-upload"
+            href="file-upload"
             isDark={isDark}
           />
           <LargeButton

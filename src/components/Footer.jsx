@@ -9,7 +9,7 @@ const Footer = () => {
   return (
     <footer
       className={`w-full py-8 px-6 mt-44 ${
-        isDark ? "#1a1a1a" : "bg-white"
+        isDark ? "bg-[#1a1a1a]" : "bg-gray-100"
       } border-t ${isDark ? "border-gray-700" : "border-gray-200"} flex flex-col items-center gap-4`}
     >
       <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"} text-center`}>
